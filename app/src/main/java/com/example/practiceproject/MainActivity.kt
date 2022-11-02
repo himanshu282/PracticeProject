@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.practiceproject.adapters.ParentAdapter
+import com.example.practiceproject.database.entities.Images
 import com.example.practiceproject.model.Article
 import com.example.practiceproject.viewmodel.ArticleViewModel
 import com.facebook.shimmer.ShimmerFrameLayout
@@ -67,6 +68,11 @@ class MainActivity : AppCompatActivity() {
             setupRecyclerView(it)
 
             it.forEach { new ->
+                val images = Images(0,new.url,new.urlToImage,new.title)
+                val article = com.example.practiceproject.database.entities.Article(new.title)
+                articleViewModel.insertArticle(article,this)
+                articleViewModel.insertImages(images,this)
+                articleViewModel.getArticleImages(new.title,this)
 
                 Log.d("TAG", "onCreate: ${new.author}")
             }
