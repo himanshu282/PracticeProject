@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -21,7 +22,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
-import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -37,8 +37,10 @@ class MainActivity : AppCompatActivity() {
         mShimmerViewContainer?.startShimmer()
         setupFirebase()
         articleViewModel= ViewModelProvider(this)[ArticleViewModel::class.java]
-        articleViewModel.getTeslaArticle()
+//        articleViewModel.getTeslaArticle()
+
         setData()
+
 
 
         val pullToRefresh = findViewById<SwipeRefreshLayout>(R.id.pullToRefresh)
@@ -56,33 +58,64 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
-
+//fun setInDb()
+//{
+//    articleViewModel.article?.observe(this){
+//        val article = com.example.practiceproject.database.entities.Article(it.title)
+//        val images = Images(0,it.url,it.urlToImage,it.title)
+//        articleViewModel.insertArticle(article,this)
+//        articleViewModel.insertImages(images,this)
+//        articleViewModel.getArticleImages(it.title,this)
+//    }
+//}
 
     private fun setData(){
-        articleViewModel.responseArticles.observe(this) {
+        articleViewModel.getData(this).observe(this) {
             Log.d("TAG", "onCreate: $it")
             mShimmerViewContainer?.stopShimmer()
             mShimmerViewContainer?.visibility = View.GONE
             recyclerView.visibility = View.VISIBLE
             setupRecyclerView(it)
 
-            it.forEach { new ->
-                val images = Images(0,new.url,new.urlToImage,new.title)
-                val article = com.example.practiceproject.database.entities.Article(new.title)
-                articleViewModel.insertArticle(article,this)
-                articleViewModel.insertImages(images,this)
-                articleViewModel.getArticleImages(new.title,this)
 
-                Log.d("TAG", "onCreate: ${new.author}")
-            }
+//            it.forEach { new ->
+//                val images = Images(0,new.url,new.urlToImage,new.title)
+//                val article = com.example.practiceproject.database.entities.Article(new.title)
+//                articleViewModel.insertArticle(article,this)
+//                articleViewModel.insertImages(images,this)
+//                articleViewModel.getArticleImages(new.title,this)
+//
+//                Log.d("TAG", "onCreate: ${new.author}")
+//            }
+
         }
+
+
+//        articleViewModel.responseArticles.observe(this) {
+//            Log.d("TAG", "onCreate: $it")
+//            mShimmerViewContainer?.stopShimmer()
+//            mShimmerViewContainer?.visibility = View.GONE
+//            recyclerView.visibility = View.VISIBLE
+//            setupRecyclerView(it)
+//
+//            it.forEach { new ->
+//                val images = Images(0,new.url,new.urlToImage,new.title)
+//                val article = com.example.practiceproject.database.entities.Article(new.title)
+//                articleViewModel.insertArticle(article,this)
+//                articleViewModel.insertImages(images,this)
+//                articleViewModel.getArticleImages(new.title,this)
+//
+//                Log.d("TAG", "onCreate: ${new.author}")
+//            }
+//        }
     }
 
-    private fun setupRecyclerView(data : List<Article>){
+    private fun setupRecyclerView(data : PagingData<Article>){
         recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
         parentAdapter = ParentAdapter(data)
         recyclerView.adapter = parentAdapter
+//        parentAdapter.submitData(lifecycle,data)
+
     }
 
     private fun setupFirebase(){
