@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 
 class ParentAdapter(var data : PagingData<Article>) : RecyclerView.Adapter<ParentAdapter.MyViewHolder>() {
     private var shape = arrayListOf("circle" , "rectangle", "square")
-//    private lateinit var article: List<Article>
 
 
     class MyViewHolder( var item: ParentItemBinding) : RecyclerView.ViewHolder(item.root) {
@@ -29,14 +28,12 @@ class ParentAdapter(var data : PagingData<Article>) : RecyclerView.Adapter<Paren
         val currentItem = shape[position]
         holder.item.typeName.text = currentItem
 
-//        article = data
         val childAdapter = ArticlePagingAdapter(currentItem)
         holder.item.rvChild.layoutManager = LinearLayoutManager(holder.itemView.context,LinearLayoutManager.HORIZONTAL,false)
         holder.item.rvChild.adapter = childAdapter
         CoroutineScope(Dispatchers.IO).launch {
             childAdapter.submitData(data)
         }
-
     }
 
     override fun getItemCount(): Int = shape.size

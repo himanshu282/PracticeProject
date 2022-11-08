@@ -1,6 +1,5 @@
 package com.example.practiceproject.adapters
 
-import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView

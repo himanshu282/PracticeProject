@@ -16,6 +16,6 @@ interface ArticleDao {
 
     @Transaction
     @Query("SELECT * FROM article where title = :title")
-    suspend fun getArticleWithImages(title : String) : List<ArticleWithImages>
+    suspend fun getArticleWithImages(title : String?) : List<ArticleWithImages>
 
 }
